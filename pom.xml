@@ -61,11 +61,6 @@
 			<artifactId>junit-jupiter-params</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-			<version>2.3.34</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -82,6 +77,12 @@
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.13.0</version>
+					<configuration>
+						<compilerArgs>
+							<arg>--add-modules</arg>
+							<arg>jdk.incubator.jextract</arg>
+						</compilerArgs>
+					</configuration>
 				</plugin>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
@@ -114,6 +115,23 @@
 				<plugin>
 					<artifactId>maven-project-info-reports-plugin</artifactId>
 					<version>3.6.1</version>
+				</plugin>
+				<plugin>
+					<groupId>dev.blanke.maven.plugins</groupId>
+					<artifactId>jextract-maven-plugin</artifactId>
+					<version>1.1.0</version>
+					<configuration>
+						<header>/usr/include/X11/Xlib.h</header>
+						<package>io.github.machineswillrise.javawm.xlib</package>
+					</configuration>
+					<executions>
+						<execution>
+							<id>jextract</id>
+							<goals>
+								<goal>jextract</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
