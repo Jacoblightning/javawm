@@ -61,6 +61,16 @@
 			<artifactId>junit-jupiter-params</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>2.0.18</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jstach.rainbowgum</groupId>
+			<artifactId>rainbowgum</artifactId>
+			<version>0.8.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -79,8 +89,7 @@
 					<version>3.13.0</version>
 					<configuration>
 						<compilerArgs>
-							<arg>--add-modules</arg>
-							<arg>jdk.incubator.jextract</arg>
+							<arg>--enable-preview</arg>
 						</compilerArgs>
 					</configuration>
 				</plugin>
@@ -117,18 +126,20 @@
 					<version>3.6.1</version>
 				</plugin>
 				<plugin>
-					<groupId>dev.blanke.maven.plugins</groupId>
-					<artifactId>jextract-maven-plugin</artifactId>
-					<version>1.1.0</version>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.1.1</version>
 					<configuration>
-						<header>/usr/include/X11/Xlib.h</header>
-						<package>io.github.machineswillrise.javawm.xlib</package>
+						<descriptorRefs>
+							<descriptorRef>jar-with-dependencies</descriptorRef>
+						</descriptorRefs>
 					</configuration>
 					<executions>
 						<execution>
-							<id>jextract</id>
+							<id>make-assembly</id>
+							<phase>package</phase>
 							<goals>
-								<goal>jextract</goal>
+								<goal>single</goal>
 							</goals>
 						</execution>
 					</executions>
@@ -136,6 +147,25 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.6.0</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/jextract</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -146,21 +176,25 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.6.0</version>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>${mainClass}</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
 				<executions>
 					<execution>
+						<id>make-assembly</id>
 						<phase>package</phase>
 						<goals>
-							<goal>shade</goal>
+							<goal>single</goal>
 						</goals>
-						<configuration>
-							<transformers>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>${mainClass}</mainClass>
-								</transformer>
-							</transformers>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
