@@ -7,7 +7,7 @@ Before you try to build the project, make sure you have `jextract` installed. No
 
 Next, you need to install the system-wide Xlib headers. If you run Debian, the proper command would be `sudo apt install libx11-dev`.
 
-The build script written in Python can help you generate the Panama bindings for Xlib and build the project. It also includes the ability to run the project directly from the command line.
+The build script written in Python can help you generate the Panama bindings for Xlib and build the project.
 
 ```bash
 ./build.py generate
