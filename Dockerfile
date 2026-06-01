@@ -5,7 +5,7 @@ WORKDIR "/build"
 COPY . .
 
 # Make apt non-interactive
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 
 # Update apt database
 RUN apt update
@@ -51,8 +51,5 @@ RUN apt install -y openjdk-21-jdk
 
 # Package the JAR
 RUN ./build.py package
-
-# Unset the DEBIAN_FRONTEND variable
-ENV DEBIAN_FRONTEND=
 
 ENTRYPOINT ["cp", "/build/target/javawm-1.0-SNAPSHOT-jar-with-dependencies.jar", "/output"]
