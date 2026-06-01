@@ -4,20 +4,23 @@ WORKDIR "/build"
 
 COPY . .
 
+# Make apt non-interactive
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Update apt database
-RUN DEBIAN_FRONTEND=noninteractive apt update
+RUN apt update
 
 # Install X11 headers
-RUN DEBIAN_FRONTEND=noninteractive apt install -y libx11-dev
+RUN apt install -y libx11-dev
 
 # Install python
-RUN DEBIAN_FRONTEND=noninteractive apt install -y python3
+RUN apt install -y python3
 
 # Install C headers
-RUN DEBIAN_FRONTEND=noninteractive apt install -y libc6-dev
+RUN apt install -y libc6-dev
 
 # Install wget
-RUN DEBIAN_FRONTEND=noninteractive apt install -y wget
+RUN apt install -y wget
 
 # Install jextract
 RUN wget https://download.java.net/java/early_access/jextract/21/1/openjdk-21-jextract+1-2_linux-x64_bin.tar.gz -O /opt/jextract.tgz
@@ -35,18 +38,21 @@ WORKDIR "/build"
 COPY --from=genbindings /build .
 
 # Update apt database
-RUN DEBIAN_FRONTEND=noninteractive apt update
+RUN apt update
 
 # Install maven
-RUN DEBIAN_FRONTEND=noninteractive apt install -y maven
+RUN apt install -y maven
 
 # Install python
-RUN DEBIAN_FRONTEND=noninteractive apt install -y python3
+RUN apt install -y python3
 
 # Install java jdk
-RUN DEBIAN_FRONTEND=noninteractive apt install -y openjdk-21-jdk
+RUN apt install -y openjdk-21-jdk
 
 # Package the JAR
 RUN ./build.py package
+
+# Unset the DEBIAN_FRONTEND variable
+ENV DEBIAN_FRONTEND=
 
 ENTRYPOINT ["cp", "/build/target/javawm-1.0-SNAPSHOT-jar-with-dependencies.jar", "/output"]
