@@ -28,4 +28,4 @@ The build script written in Python can help you generate the Panama bindings for
 ```
 
 ### Credits
-- Thank you @Jacoblightning for adding better handling to the Python build script and adding Docker build support.
+- Thank you @Jacoblightning for adding better error handling to the Python build script and adding Docker build support.
